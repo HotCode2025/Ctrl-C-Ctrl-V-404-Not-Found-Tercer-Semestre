@@ -1,3 +1,14 @@
+/* Documentación del archivo Clase01.js
+ Este archivo implementa un sistema simple para gestionar dispositivos de entrada, monitores, computadoras y órdenes de compra.
+ Se organiza en tres secciones principales:
+ 1. Declaración de clases: Definición de las clases base y derivadas.
+ 2. Herencias: Clases que heredan de otras.
+ 3. Creación de órdenes: Instanciación de objetos y creación de órdenes.
+*/
+
+// 1. Declaración de clases
+
+// Clase base para dispositivos de entrada
 class DispositivoEntrada {
   constructor(tipoEntrada, marca) {
     this._tipoEntrada = tipoEntrada;
@@ -18,6 +29,10 @@ class DispositivoEntrada {
     this._marca = marca;
   }
 }
+
+// 2. Herencias
+
+// Raton hereda de DispositivoEntrada
 class Raton extends DispositivoEntrada {
   static contadorRatones = 0;
 
@@ -44,6 +59,7 @@ class Teclado extends DispositivoEntrada {
   }
 }
 
+// Clase Monitor independiente
 class Monitor {
   static contadorMonitores = 0;
 
@@ -76,6 +92,7 @@ class Monitor {
   }
 }
 
+// Clase Computadora que agrupa monitor, teclado y raton
 class Computadora {
   static contadorComputadoras = 0;
 
@@ -119,6 +136,8 @@ class Computadora {
     return `Computadora ${this._idComputadora}: ${this._nombre} \n ${this._monitor} \n ${this._raton} \n ${this._teclado}`;
   }
 }
+
+// Clase Orden para gestionar listas de computadoras
 class Orden {
   static contadorOrdenes = 0;
 
@@ -144,6 +163,8 @@ class Orden {
     console.log(`Orden: ${this._idOrden}, Computadoras: ${computadorasOrden}`);
   }
 }
+
+// 3. Creación de órdenes
 
 let raton1 = new Raton("USB", "Logitech");
 let raton2 = new Raton("Bluetooth", "Genius");
