@@ -37,7 +37,7 @@ class CatalogoPeliculas:
             print("=" * 50 + "\n")
             
         except Exception as e:
-            print(f"❌ Error al listar películas: {e}")
+            print(f" Error al listar películas: {e}")
     
     @staticmethod
     def eliminar_archivo() -> None:
