@@ -11,7 +11,7 @@ def limpiar_pantalla():
 
 def mostrar_menu():
     print("\n" + "=" * 50)
-    print("🎬 SISTEMA DE CATÁLOGO DE PELÍCULAS")
+    print(" SISTEMA DE CATÁLOGO DE PELÍCULAS")
     print("=" * 50)
     print("1️  Agregar película")
     print("2️  Listar películas")
@@ -27,22 +27,22 @@ def agregar_pelicula_interactivo():
         pelicula = Pelicula(nombre)
         CatalogoPeliculas.agregar_pelicula(pelicula)
     else:
-        print("❌ El nombre de la película no puede estar vacío.")
+        print(" El nombre de la película no puede estar vacío.")
 
 def listar_peliculas_interactivo():
 
-    print("\n📋 LISTANDO CATÁLOGO")
+    print("\n LISTANDO CATÁLOGO")
     CatalogoPeliculas.listar_peliculas()
 
 def eliminar_archivo_interactivo():
 
-    print("\n🗑️  ELIMINAR ARCHIVO")
+    print("\n ELIMINAR ARCHIVO")
     confirmar = input("¿Está seguro que desea eliminar el archivo de películas? (s/n): ").strip().lower()
     
     if confirmar == 's':
         CatalogoPeliculas.eliminar_archivo()
     else:
-        print("❌ Operación cancelada.")
+        print(" Operación cancelada.")
 
 def main():
 
@@ -57,10 +57,10 @@ def main():
         elif opcion == '3':
             eliminar_archivo_interactivo()
         elif opcion == '4':
-            print("\n👋 ¡Gracias por usar el catálogo de películas! Hasta luego.")
+            print("\n ¡Gracias por usar el catálogo de películas! Hasta luego.")
             break
         else:
-            print("\n❌ Opción no válida. Por favor, seleccione una opción entre 1 y 4.")
+            print("\n Opción no válida. Por favor, seleccione una opción entre 1 y 4.")
         
         input("\nPresione Enter para continuar...")
         limpiar_pantalla()
