@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reloj JavaScript</title>
+
+    <style>
+        body{
+            margin: 0;
+            height: 100vh;
+            background: linear-gradient(135deg, #0539a2, #010a11);
+            font-family: Arial, sans-serif;
+            color: white;
+        }
+
+        .contenedor{
+            text-align: center;
+            padding-top: 80px;
+        }
+
+        h1{
+            font-size: 3rem;
+            margin-bottom: 20px;
+        }
+
+        #mensaje{
+            font-size: 20px;
+            line-height: 1.8;
+        }
+
+        #reloj{
+            position: fixed;
+            bottom: 15px;
+            right: 20px;
+            font-size: 2rem;
+            font-weight: bold;
+            color: #ffffff;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="contenedor">
+
+        <h1>Reloj UTN</h1>
+
+        <div id="mensaje"></div>
+
+    </div>
+
+    <div id="reloj">00:00:00</div>
+
+    <script src="RelojFuncional.js"></script>
+
+</body>
+</html>
