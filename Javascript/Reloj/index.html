@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reloj JavaScript</title>
+
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body{
+            height: 100vh;
+            font-family: Arial, sans-serif;
+            color: white;
+            overflow: hidden;
+
+            /* Fondo digital */
+            background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.7)),
+            url('https://images.unsplash.com/photo-1518770660439-4636190af475?q=80&w=1920&auto=format&fit=crop');
+
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .contenedor{
+            text-align: center;
+            background: rgba(0,0,0,0.45);
+            padding: 40px;
+            border-radius: 20px;
+            backdrop-filter: blur(6px);
+            box-shadow: 0 0 25px rgba(0,0,0,0.5);
+        }
+
+        h1{
+            font-size: 3rem;
+            margin-bottom: 20px;
+            letter-spacing: 2px;
+        }
+
+        #mensaje{
+            font-size: 1.5rem;
+            margin-bottom: 25px;
+        }
+
+        #reloj{
+            font-size: 4rem;
+            font-weight: bold;
+            letter-spacing: 5px;
+            color: #00ffff;
+            text-shadow:
+                0 0 10px #00ffff,
+                0 0 20px #00ffff,
+                0 0 40px #00ffff;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="contenedor">
+
+        <h1>Reloj UTN</h1>
+
+        <div id="mensaje"></div>
+
+        <div id="reloj">00:00:00</div>
+
+    </div>
+
+    <script>
+
+        function actualizarReloj() {
+
+            let fecha = new Date();
+
+            let horas = fecha.getHours();
+            let minutos = fecha.getMinutes();
+            let segundos = fecha.getSeconds();
+
+            // Completar con 0
+            horas = horas.toString().padStart(2, '0');
+            minutos = minutos.toString().padStart(2, '0');
+            segundos = segundos.toString().padStart(2, '0');
+
+            let horaActual = `${horas}:${minutos}:${segundos}`;
+
+            document.getElementById("reloj").innerHTML = horaActual;
+
+            let mensaje = "";
+
+            if(horas >= 6 && horas < 12){
+                mensaje = "🌞 Buenos días";
+            }
+            else if(horas >= 12 && horas < 20){
+                mensaje = "☀️ Buenas tardes";
+            }
+            else{
+                mensaje = "🌙 Buenas noches";
+            }
+
+            document.getElementById("mensaje").innerHTML = mensaje;
+        }
+
+        setInterval(actualizarReloj, 1000);
+
+        actualizarReloj();
+
+    </script>
+
+</body>
+</html>
