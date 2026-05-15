@@ -1,6 +1,6 @@
 // Saludo setTimeout
 function miFuncionBatman(){
-    document.getElementById("mensaje").innerHTML += "Ctr C + Ctrl V = 404 Not Found <br>";
+    document.getElementById("mensaje").innerHTML += "Ctr C + Ctrl V = 404 Not Found <br>";/* */
 }
 
 setTimeout(miFuncionBatman, 3000);

@@ -6,32 +6,33 @@
     <title>Reloj JavaScript</title>
 
     <style>
+        /*el * le indica al navegador que aplicque todas las reglas a todos los elementos, body, h1, div*/
         *{
             margin: 0;
             padding: 0;
-            box-sizing: border-box;
+            box-sizing: border-box;/*hace que el tamaño incluya bordes y rellenos*/
         }
 
         body{
-            height: 100vh;
+            height: 100vh;/*ocupa el 100% de la pantalla*/
             font-family: Arial, sans-serif;
             color: white;
-            overflow: hidden;
+            overflow: hidden;/*evita que aparezcan barras de desplazamiento*/
 
-            /* Fondo digital */
+            /* Fondo digital-  */
             background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.7)),
             url('https://images.unsplash.com/photo-1518770660439-4636190af475?q=80&w=1920&auto=format&fit=crop');
 
-            background-size: cover;
-            background-position: center;
-            display: flex;
-            justify-content: center;
-            align-items: center;
+            background-size: cover;/*ajusta la imagen para cubrir toda la pantalla*/
+            background-position: center;/*centra la imagen en el fondo*/
+            display: flex;/*con flexbox centramos el contenido*/
+            justify-content: center;/*centrado horizontal*/
+            align-items: center;/*central vertical*/
         }
-
+        /*Caja contenedora del reloj*/
         .contenedor{
             text-align: center;
-            background: rgba(0,0,0,0.45);
+            background: rgba(0,0,0,0.45);/*negro con transparencia*/
             padding: 40px;
             border-radius: 20px;
             backdrop-filter: blur(6px);
@@ -41,20 +42,20 @@
         h1{
             font-size: 3rem;
             margin-bottom: 20px;
-            letter-spacing: 2px;
+            letter-spacing: 2px;/*espacio entre las letras*/
         }
 
         #mensaje{
             font-size: 1.5rem;
             margin-bottom: 25px;
         }
-
+        /*estilo especifico del reloj digital*/
         #reloj{
             font-size: 4rem;
             font-weight: bold;
             letter-spacing: 5px;
             color: #00ffff;
-            text-shadow:
+            text-shadow:/*efecto resplandor neon glow*/
                 0 0 10px #00ffff,
                 0 0 20px #00ffff,
                 0 0 40px #00ffff;
@@ -66,24 +67,26 @@
     <div class="contenedor">
 
         <h1>Reloj UTN</h1>
-
+        <!--div vacio donde javascript inyecta el saludo-->
         <div id="mensaje"></div>
-
+        <!--div donde mostrara la hora 00:00:00 valor inicial-->
         <div id="reloj">00:00:00</div>
 
     </div>
 
     <script>
-
+        /*funcion principal obtiene la hora del sistema y actualiza la interfaz*/
         function actualizarReloj() {
+            /*creamos un objeteo DATE que contiene la fecha y hora exacta del momento*/ 
 
             let fecha = new Date();
-
+            /*extraemos las horas, minutos, segundos por separados*/
             let horas = fecha.getHours();
             let minutos = fecha.getMinutes();
             let segundos = fecha.getSeconds();
 
-            // Completar con 0
+            /*Completar con 0, to.String() convierte el numero a texto
+            padStar asegura que siempre haya 2 digitos*/
             horas = horas.toString().padStart(2, '0');
             minutos = minutos.toString().padStart(2, '0');
             segundos = segundos.toString().padStart(2, '0');
