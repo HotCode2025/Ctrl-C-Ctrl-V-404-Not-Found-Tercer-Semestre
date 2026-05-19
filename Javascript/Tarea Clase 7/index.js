@@ -1,4 +1,4 @@
-// Versión super simple - solo devuelve los índices
+
 function reinas(n) {
     const soluciones = []; // Aquí guardaremos las soluciones encontradas
     const columnas = Array(n);
@@ -17,7 +17,6 @@ function valido(fila, col) {
             return false;
     }
     
-    // Si no encontró conflictos, es válido
     return true;
 }
     
@@ -39,15 +38,11 @@ function valido(fila, col) {
     return soluciones;
 }
 
-// Usar
+//Ejecucion del programa
+
 console.log('Soluciones para 8 reinas:');
 const sols = reinas(8);
 console.log(`Total: ${sols.length}`);
 console.log('Primera solución:', sols[0]);
 console.log('Segunda solución:', sols[1]);
 console.log('Tercera solución:', sols[2]);
-
-console.log('\nSoluciones para 9 reinas:');
-const sols9 = reinas(9);
-console.log(`Total: ${sols9.length}`);
-console.log('Primera solución:', sols9[0]);
