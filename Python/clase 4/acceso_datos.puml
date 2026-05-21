@@ -1,0 +1,64 @@
+@startuml
+' Acceso de datos - Diagrama UML (PlantUML)
+skinparam backgroundColor #000000
+skinparam classBorderColor #FFFFFF
+skinparam classBackgroundColor #0b0b0b
+skinparam classFontColor #FFFFFF
+skinparam noteBackgroundColor #111111
+skinparam noteBorderColor #FFFFFF
+
+package "acceso_datos" {
+  class conexion {
+    - DATABASE : String
+    - USERNAME : String
+    - PASSWORD : String
+    - DB_PORT : String
+    - HOST : String
+    - conexion : connection
+    - cursor : Cursor
+    + obtenerConexion(ds) : Connection
+    + obtenerCursor(ds) : Cursor
+    + cerrar(ds)
+  }
+
+  class Persona {
+    - id_persona : int
+    - nombre : String
+    - apellido : String
+    - email : String
+    + __str__() : String
+    + "metodo Get/Set de cada atributo"()
+  }
+
+  class PersonaDao {
+    - SELECCIONAR : String
+    - INSERTAR : String
+    - ACTUALIZAR : String
+    - ELIMINAR : String
+    + seleccionar(ds)
+    + insertar(ds, persona)
+    + actualizar(ds, persona)
+    + eliminar(ds, persona)
+  }
+
+  note left of conexion
+    Responsabilidades:
+    Administrar la conexión a la base de datos
+  end note
+
+  note right of Persona
+    Responsabilidades:
+    Crear objetos de la entidad Persona
+  end note
+
+  note right of PersonaDao
+    Responsabilidades:
+    Realizar las operaciones sobre la base de datos
+    de la entidad Persona
+  end note
+
+  ' Relaciones
+  conexion o-- PersonaDao : "usa / gestiona"
+  PersonaDao --> Persona : "crea objetos de"
+}
+@enduml
