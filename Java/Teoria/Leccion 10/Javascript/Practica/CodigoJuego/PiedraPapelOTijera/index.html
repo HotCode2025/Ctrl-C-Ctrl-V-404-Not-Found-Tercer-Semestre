@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Piedra Papel o Tijera</title>
+
+  <style>
+    *{
+      margin:0;
+      padding:0;
+      box-sizing:border-box;
+      font-family: Arial, Helvetica, sans-serif;
+    }
+
+    body{
+      height:100vh;
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      background: linear-gradient(135deg, #1e3c72, #2a5298);
+      color:white;
+    }
+
+    .contenedor{
+      width:400px;
+      background: rgba(255,255,255,0.1);
+      backdrop-filter: blur(10px);
+      padding:30px;
+      border-radius:20px;
+      text-align:center;
+      box-shadow:0 0 20px rgba(0,0,0,0.3);
+    }
+
+    h1{
+      margin-bottom:20px;
+      font-size:32px;
+    }
+
+    .botones{
+      display:flex;
+      gap:10px;
+      justify-content:center;
+      margin:25px 0;
+    }
+
+    button{
+      padding:12px 18px;
+      border:none;
+      border-radius:12px;
+      cursor:pointer;
+      font-size:16px;
+      font-weight:bold;
+      transition:0.3s;
+    }
+
+    button:hover{
+      transform:scale(1.08);
+    }
+
+    .piedra{
+      background:#9e9e9e;
+      color:white;
+    }
+
+    .papel{
+      background:#4caf50;
+      color:white;
+    }
+
+    .tijera{
+      background:#f44336;
+      color:white;
+    }
+
+    .reiniciar{
+      background:#ff9800;
+      color:white;
+      margin-top:20px;
+      width:100%;
+    }
+
+    .resultado{
+      margin-top:20px;
+      font-size:22px;
+      font-weight:bold;
+      min-height:40px;
+    }
+
+    .marcador{
+      margin-top:15px;
+      font-size:20px;
+    }
+
+    .partida{
+      margin-top:10px;
+      font-size:18px;
+      color:#ffe082;
+    }
+
+    .ganador{
+      margin-top:20px;
+      font-size:28px;
+      color:#00ff95;
+      font-weight:bold;
+    }
+
+  </style>
+</head>
+<body>
+
+  <div class="contenedor">
+
+    <h1>🎮 Piedra Papel o Tijera</h1>
+
+    <div class="botones">
+      <button class="piedra" onclick="jugar(1)">🪨 Piedra</button>
+      <button class="papel" onclick="jugar(2)">📄 Papel</button>
+      <button class="tijera" onclick="jugar(3)">✂️ Tijera</button>
+    </div>
+
+    <div class="resultado" id="resultado">
+      Elegí una opción
+    </div>
+
+    <div class="marcador" id="marcador">
+      Jugador 0 - 0 Computadora
+    </div>
+
+    <div class="partida" id="partida">
+      Primera partida
+    </div>
+
+    <div class="ganador" id="ganador"></div>
+
+    <button class="reiniciar" onclick="reiniciarJuego()">
+      🔄 Reiniciar Juego
+    </button>
+
+  </div>
+
+  <script>
+
+    let jugador = 0;
+    let computadora = 0;
+    let ronda = 1;
+    let juegoTerminado = false;
+
+    function numerosAleatorios(min, max){
+      return Math.floor(Math.random() * (max - min + 1)) + min;
+    }
+
+    function nombreEleccion(numero){
+      if(numero === 1) return "🪨 Piedra";
+      if(numero === 2) return "📄 Papel";
+      return "✂️ Tijera";
+    }
+
+    function jugar(eleccionJugador){
+
+      if(juegoTerminado) return;
+
+      let eleccionComputadora = numerosAleatorios(1,3);
+
+      let texto = `
+        Vos elegiste ${nombreEleccion(eleccionJugador)} <br>
+        La computadora eligió ${nombreEleccion(eleccionComputadora)} <br><br>
+      `;
+
+      if(eleccionJugador === eleccionComputadora){
+        texto += "🤝 Empate";
+      }
+
+      else if(
+        (eleccionJugador === 1 && eleccionComputadora === 3) ||
+        (eleccionJugador === 2 && eleccionComputadora === 1) ||
+        (eleccionJugador === 3 && eleccionComputadora === 2)
+      ){
+        texto += "🎉 ¡Ganaste esta ronda!";
+        jugador++;
+      }
+
+      else{
+        texto += "💀 ¡Perdiste esta ronda!";
+        computadora++;
+      }
+
+      document.getElementById("resultado").innerHTML = texto;
+
+      document.getElementById("marcador").innerHTML =
+        `Jugador ${jugador} - ${computadora} Computadora`;
+
+      ronda++;
+
+      document.getElementById("partida").innerHTML =
+        `Partida Nº ${ronda}`;
+
+      if(jugador === 3){
+        document.getElementById("ganador").innerHTML =
+          "🏆 ¡GANASTE LA PARTIDA!";
+        juegoTerminado = true;
+      }
+
+      if(computadora === 3){
+        document.getElementById("ganador").innerHTML =
+          "💻 LA COMPUTADORA GANÓ";
+        juegoTerminado = true;
+      }
+    }
+
+    function reiniciarJuego(){
+
+      jugador = 0;
+      computadora = 0;
+      ronda = 1;
+      juegoTerminado = false;
+
+      document.getElementById("resultado").innerHTML =
+        "Elegí una opción";
+
+      document.getElementById("marcador").innerHTML =
+        "Jugador 0 - 0 Computadora";
+
+      document.getElementById("partida").innerHTML =
+        "Primera partida";
+
+      document.getElementById("ganador").innerHTML = "";
+    }
+
+  </script>
+
+</body>
+</html>

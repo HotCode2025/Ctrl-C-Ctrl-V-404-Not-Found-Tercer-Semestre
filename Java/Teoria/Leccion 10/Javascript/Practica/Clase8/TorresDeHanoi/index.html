@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Torres de Hanoi</title>
+
+  <style>
+
+    *{
+      margin:0;
+      padding:0;
+      box-sizing:border-box;
+      font-family: Arial, Helvetica, sans-serif;
+    }
+
+    body{
+      min-height:100vh;
+      background: linear-gradient(135deg,#0f172a,#1e293b,#334155);
+      color:white;
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      padding:20px;
+    }
+
+    .logo{
+      font-size:80px;
+      margin-top:10px;
+      animation: flotar 3s ease-in-out infinite;
+      text-shadow:0 0 25px rgba(255,255,255,0.4);
+    }
+
+    @keyframes flotar{
+      0%{transform:translateY(0px);}
+      50%{transform:translateY(-10px);}
+      100%{transform:translateY(0px);}
+    }
+
+    h1{
+      margin-top:10px;
+      font-size:42px;
+    }
+
+    p{
+      margin-top:10px;
+      color:#cbd5e1;
+      text-align:center;
+      max-width:800px;
+      line-height:1.5;
+    }
+
+    button{
+      margin-top:25px;
+      padding:14px 30px;
+      border:none;
+      border-radius:14px;
+      background:#38bdf8;
+      color:white;
+      font-size:18px;
+      cursor:pointer;
+      transition:0.3s;
+      box-shadow:0 0 20px rgba(56,189,248,0.4);
+    }
+
+    button:hover{
+      transform:scale(1.05);
+      background:#0ea5e9;
+    }
+
+    .contenedor{
+      margin-top:40px;
+      display:flex;
+      gap:35px;
+      flex-wrap:wrap;
+      justify-content:center;
+      align-items:flex-start;
+    }
+
+    .torres{
+      display:flex;
+      gap:40px;
+      align-items:flex-end;
+      height:420px;
+    }
+
+    .torre-box{
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+    }
+
+    .nombre{
+      margin-top:15px;
+      font-size:24px;
+      font-weight:bold;
+    }
+
+    .torre{
+      width:180px;
+      height:350px;
+      position:relative;
+      display:flex;
+      flex-direction:column-reverse;
+      align-items:center;
+      padding-bottom:10px;
+      border-bottom:10px solid #8b5e34;
+    }
+
+    .poste{
+      position:absolute;
+      bottom:0;
+      width:14px;
+      height:280px;
+      background:#d6a56c;
+      border-radius:10px;
+    }
+
+    .disco{
+      height:28px;
+      border-radius:10px;
+      margin-bottom:6px;
+      z-index:2;
+      transition:0.5s;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      color:white;
+      font-weight:bold;
+      box-shadow:0 0 10px rgba(0,0,0,0.4);
+    }
+
+    .panel{
+      width:320px;
+      background:rgba(255,255,255,0.08);
+      border:1px solid rgba(255,255,255,0.15);
+      border-radius:15px;
+      padding:20px;
+      backdrop-filter:blur(10px);
+      box-shadow:0 0 25px rgba(0,0,0,0.3);
+    }
+
+    .panel h2{
+      text-align:center;
+      margin-bottom:15px;
+    }
+
+    .resultado{
+      height:500px;
+      overflow-y:auto;
+      padding-right:8px;
+    }
+
+    .movimiento{
+      background:rgba(255,255,255,0.08);
+      padding:10px;
+      border-radius:10px;
+      margin-bottom:10px;
+      animation: aparecer 0.4s;
+    }
+
+    @keyframes aparecer{
+      from{
+        opacity:0;
+        transform:translateX(20px);
+      }
+      to{
+        opacity:1;
+        transform:translateX(0);
+      }
+    }
+
+  </style>
+</head>
+
+<body>
+
+  <div class="logo">🗼</div>
+
+  <h1>Ctr C + Ctrl V = 404 Not Found</h1>
+  
+  <h2>Torres de Hanoi</h2>
+
+  <p>
+    Algoritmo recursivo en JavaScript.
+    El objetivo es mover todos los discos desde la torre A
+    hacia la torre C respetando las reglas del juego.
+  </p>
+
+  <button onclick="iniciar()">
+    Iniciar Simulación
+  </button>
+
+  <div class="contenedor">
+
+    <div class="torres">
+
+      <div class="torre-box">
+        <div class="torre" id="A">
+          <div class="poste"></div>
+        </div>
+        <div class="nombre">A</div>
+      </div>
+
+      <div class="torre-box">
+        <div class="torre" id="B">
+          <div class="poste"></div>
+        </div>
+        <div class="nombre">B</div>
+      </div>
+
+      <div class="torre-box">
+        <div class="torre" id="C">
+          <div class="poste"></div>
+        </div>
+        <div class="nombre">C</div>
+      </div>
+
+    </div>
+
+    <div class="panel">
+
+      <h2>📋 Movimientos</h2>
+
+      <div class="resultado" id="resultado"></div>
+
+    </div>
+
+  </div>
+
+  <script>
+
+    const cantidadDiscos = 5;
+
+    let torres = {
+      A: [],
+      B: [],
+      C: []
+    };
+
+    let movimientos = [];
+
+    const resultadoHTML =
+      document.getElementById("resultado");
+
+    function crearDiscos(){
+
+      torres.A = [];
+      torres.B = [];
+      torres.C = [];
+
+      for(let i = cantidadDiscos; i >= 1; i--){
+        torres.A.push(i);
+      }
+
+      dibujarTorres();
+    }
+
+    function dibujarTorres(){
+
+      ["A","B","C"].forEach(nombre => {
+
+        const torre =
+          document.getElementById(nombre);
+
+        torre.innerHTML =
+          '<div class="poste"></div>';
+
+        torres[nombre].forEach(disco => {
+
+          const div =
+            document.createElement("div");
+
+          div.classList.add("disco");
+
+          div.style.width =
+            (disco * 25 + 40) + "px";
+
+          div.style.background =
+            `hsl(${disco * 45}, 70%, 55%)`;
+
+          div.innerText = disco;
+
+          torre.appendChild(div);
+        });
+      });
+    }
+
+    function hanoi(n, origen, auxiliar, destino){
+
+      if(n === 1){
+
+        movimientos.push([origen, destino]);
+        return;
+      }
+
+      hanoi(
+        n - 1,
+        origen,
+        destino,
+        auxiliar
+      );
+
+      movimientos.push([origen, destino]);
+
+      hanoi(
+        n - 1,
+        auxiliar,
+        origen,
+        destino
+      );
+    }
+
+    async function ejecutarMovimientos(){
+
+      for(let i = 0; i < movimientos.length; i++){
+
+        let [origen, destino] =
+          movimientos[i];
+
+        const disco =
+          torres[origen].pop();
+
+        torres[destino].push(disco);
+
+        dibujarTorres();
+
+        const movimiento =
+          document.createElement("div");
+
+        movimiento.classList.add("movimiento");
+
+        movimiento.innerHTML = `
+          <strong>Paso ${i + 1}</strong><br>
+          Mover disco ${disco}
+          desde ${origen} hacia ${destino}
+        `;
+
+        resultadoHTML.appendChild(movimiento);
+
+        resultadoHTML.scrollTop =
+          resultadoHTML.scrollHeight;
+
+        await new Promise(r =>
+          setTimeout(r, 700)
+        );
+      }
+    }
+
+    async function iniciar(){
+
+      movimientos = [];
+
+      resultadoHTML.innerHTML = "";
+
+      crearDiscos();
+
+      hanoi(
+        cantidadDiscos,
+        "A",
+        "B",
+        "C"
+      );
+
+      await ejecutarMovimientos();
+    }
+
+    crearDiscos();
+
+  </script>
+
+</body>
+</html>
