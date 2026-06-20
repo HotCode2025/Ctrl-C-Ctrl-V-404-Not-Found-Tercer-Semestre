@@ -1,5 +1,5 @@
 {
   "code-runner.executorMap": {
-    "java": "cd $dir && cd .. && javac -encoding UTF-8 test/$fileName && java test.$fileNameWithoutExt"
+    "java": "powershell -NoProfile -ExecutionPolicy Bypass -File \"$workspaceRoot/.vscode/run-java.ps1\" -FullFilePath $fullFileName"
   }
 }
