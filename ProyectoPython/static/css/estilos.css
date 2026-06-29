@@ -1,0 +1,305 @@
+/* CONFIGURACIÓN BASE E INSTITUCIONAL (Inspirado en HSI) */
+:root {
+  --bg-principal: #f3f6f9;
+  --bg-sidebar: #ffffff;
+  --texto-oscuro: #3f4254;
+  --texto-mutado: #b5b5c3;
+  --azul-hsi: #0074ba;
+  --azul-hover: #005a92;
+  --borde-suave: #e4e6ef;
+}
+
+body {
+  margin: 0;
+  font-family: "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  background-color: var(--bg-principal);
+  color: var(--texto-oscuro);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* CONTENEDOR APP GLOBAL */
+.app-container {
+  display: flex;
+  min-height: 100vh;
+}
+
+/* MENÚ LATERAL (SIDEBAR) */
+.sidebar {
+  width: 260px;
+  background-color: var(--bg-sidebar);
+  border-right: 1px solid var(--borde-suave);
+  display: flex;
+  flex-direction: column;
+}
+
+.sidebar-header {
+  padding: 24px;
+  border-bottom: 1px solid var(--borde-suave);
+  background-color: #ffffff;
+}
+
+.sidebar-header h1 {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--azul-hsi);
+  letter-spacing: 0px;
+  text-align: center;
+}
+
+.sidebar-header p {
+  margin: 4px 0 0 0;
+  font-size: 11px;
+  color: var(--texto-mutado);
+  font-weight: 600;
+}
+
+.sidebar-nav {
+  flex: 1;
+  padding: 16px;
+}
+
+.nav-btn {
+  width: 100%;
+  text-align: left;
+  background: none;
+  border: none;
+  padding: 12px 16px;
+  margin-bottom: 8px;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #464e5f;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.nav-btn:hover {
+  background-color: #f3f6f9;
+  color: var(--azul-hsi);
+}
+
+.nav-btn.active {
+  background-color: #e1f0fa;
+  color: var(--azul-hsi);
+}
+
+.sidebar-footer {
+  padding: 16px;
+  border-top: 1px solid var(--borde-suave);
+  font-size: 11px;
+  color: var(--texto-mutated);
+  text-align: center;
+  background-color: #fafafa;
+}
+
+/* ÁREA DE CONTENIDO PRINCIPAL */
+.main-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.main-header {
+  background-color: #ffffff;
+  padding: 16px 32px;
+  border-bottom: 1px solid var(--borde-suave);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.badge-hospital {
+  background-color: #e1f0fa;
+  color: var(--azul-hsi);
+  font-size: 11px;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: 4px;
+  text-transform: uppercase;
+}
+
+.user-info {
+  font-size: 13px;
+  color: #7e8299;
+}
+
+.user-info strong {
+  color: var(--texto-oscuro);
+}
+
+.content-body {
+  padding: 32px;
+}
+
+/* TARJETAS Y CONTENEDORES BLANCOS */
+.card-modulo {
+  background-color: #ffffff;
+  padding: 24px;
+  border-radius: 8px;
+  border: 1px solid var(--borde-suave);
+  box-shadow: 0px 0px 20px 0px rgba(0, 0, 0, 0.01);
+}
+
+.card-modulo h2 {
+  margin: 0 0 8px 0;
+  font-size: 20px;
+  color: var(--texto-oscuro);
+}
+
+.card-modulo p {
+  margin: 0;
+  font-size: 14px;
+  color: #7e8299;
+}
+
+/* STYLES PARA EL FORMULARIO DE CARGA */
+.form-container {
+  max-width: 650px;
+  margin: 0 auto;
+}
+
+.form-titulo {
+  color: var(--azul-hsi);
+  margin-bottom: 20px;
+  border-bottom: 2px solid var(--borde-suave);
+  padding-bottom: 8px;
+  font-size: 18px;
+}
+
+.form-seccion {
+  background-color: #f8f9fa;
+  border: 1px solid var(--borde-suave);
+  padding: 16px;
+  border-radius: 6px;
+  margin-bottom: 20px;
+}
+
+.form-seccion h3 {
+  margin: 0 0 12px 0;
+  font-size: 12px;
+  text-transform: uppercase;
+  color: #7e8299;
+  letter-spacing: 0.5px;
+}
+
+.grid-formulario {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+@media (max-width: 600px) {
+  .grid-formulario {
+    grid-template-columns: 1fr;
+  }
+}
+
+.form-grupo {
+  display: flex;
+  flex-direction: column;
+}
+
+.form-grupo label {
+  font-size: 12px;
+  font-weight: 600;
+  color: #464e5f;
+  margin-bottom: 4px;
+}
+
+.form-control {
+  padding: 8px 12px;
+  border: 1px solid var(--borde-suave);
+  border-radius: 4px;
+  font-size: 13px;
+  color: var(--texto-oscuro);
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.form-control:focus {
+  border-color: var(--azul-hsi);
+}
+
+.btn-primario {
+  width: 100%;
+  background-color: var(--azul-hsi);
+  color: white;
+  padding: 12px;
+  border: none;
+  border-radius: 4px;
+  font-weight: 700;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.btn-primario:hover {
+  background-color: var(--azul-hover);
+}
+.btn-primario:disabled {
+  background-color: var(--texto-mutado);
+}
+
+/* STYLES PARA EL MONITOR (TABLA) DE MARCIA */
+.monitor-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+  background-color: #f8f9fa;
+  padding: 12px;
+  border-radius: 6px;
+  border: 1px solid var(--borde-suave);
+}
+
+.tabla-hsi {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+  font-size: 13px;
+}
+
+.tabla-hsi th {
+  background-color: #f3f6f9;
+  color: #464e5f;
+  font-weight: 600;
+  padding: 12px;
+  border-bottom: 1px solid var(--borde-suave);
+  text-align: left;
+}
+
+.tabla-hsi td {
+  padding: 12px;
+  border-bottom: 1px solid var(--borde-suave);
+  vertical-align: top;
+}
+
+.tabla-hsi tr:hover {
+  background-color: #fcfcfd;
+}
+
+/* ESTADOS DE LOS TURNOS (BADGES) */
+.badge-estado {
+  display: inline-block;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+.badge-pendiente {
+  background-color: #fff4de;
+  color: #ffa800;
+}
+.badge-asignado {
+  background-color: #c9f7f5;
+  color: #1bc5bd;
+}
+.badge-rechazado {
+  background-color: #ffe2e2;
+  color: #f64e60;
+}
