@@ -1,0 +1,178 @@
+{% extends 'base.html' %}
+
+{% block contenido %}
+<!-- El diseño se divide en 2 columnas si se selecciona un paciente para ver la ficha -->
+{% if paciente_seleccionado %}
+  <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px;">
+{% else %}
+  <div style="display: grid; grid-template-columns: 1fr; gap: 24px;">
+{% endif %}
+  
+  <!-- PANEL DE GESTIÓN / LISTADO (COLUMNA IZQUIERDA) -->
+  <div>
+    <h2 class="form-titulo">👥 Maestro General de Pacientes (ABM)</h2>
+
+    <!-- Formulario de Registro / Edición -->
+    <form action="/pacientes/guardar" method="POST" class="form-seccion">
+      <h3>
+        {% if paciente_editar %}✏️ Modificar Datos del Paciente{% else %}➕ Registrar Nuevo Paciente{% endif %}
+      </h3>
+      
+      <!-- Si estamos editando, mandamos el ID oculto -->
+      {% if paciente_editar %}
+        <input type="hidden" name="id_paciente" value="{{ paciente_editar.id_paciente }}">
+      {% endif %}
+
+      <div class="grid-formulario">
+        <div class="form-grupo">
+          <label>Nombre y Apellido</label>
+          <input type="text" name="nombre_apellido" value="{{ paciente_editar.nombre_apellido if paciente_editar else '' }}" required class="form-control" />
+        </div>
+        <div class="form-grupo">
+          <label>DNI</label>
+          <input type="text" name="dni" value="{{ paciente_editar.dni if paciente_editar else '' }}" required class="form-control" />
+        </div>
+        <div class="form-grupo">
+          <label>F. Nacimiento</label>
+          <input type="date" name="fecha_nacimiento" value="{{ paciente_editar.fecha_nacimiento if paciente_editar else '' }}" required class="form-control" />
+        </div>
+        <div class="form-grupo">
+          <label>Nro. Historia Clínica</label>
+          <input type="text" name="nro_hc" value="{{ paciente_editar.nro_hc if paciente_editar else '' }}" required class="form-control" />
+        </div>
+        <div class="form-grupo">
+          <label>Teléfono de Contacto</label>
+          <input type="text" name="telefono" value="{{ paciente_editar.telefono if paciente_editar else '' }}" class="form-control" placeholder="Ej: 2604XXXXXX" />
+        </div>
+        <div class="form-grupo">
+          <label>Obra Social / Cobertura</label>
+          <input type="text" name="obra_social" value="{{ paciente_editar.obra_social if paciente_editar else '' }}" class="form-control" placeholder="Ej: OSEP, PAMI o Ninguna" />
+        </div>
+      </div>
+      
+      <div style="margin-top: 16px; display: flex; gap: 8px;">
+        <button type="submit" class="btn-primario" style="width: auto;">
+          {% if paciente_editar %}Actualizar Paciente{% else %}Dar de Alta{% endif %}
+        </button>
+        {% if paciente_editar %}
+          <a href="/pacientes" class="btn-primario" style="background: #7e8299; width: auto; text-decoration: none; display: flex; align-items: center; justify-content: center; padding: 0 14px;">Cancelar</a>
+        {% endif %}
+      </div>
+    </form>
+
+    <!-- Buscador Inteligente en Tiempo Real -->
+    <input
+      type="text"
+      id="buscadorPacientes"
+      placeholder="🔍 Buscar por Nombre o DNI en el listado local..."
+      class="form-control"
+      style="margin-bottom: 12px; width: 96%;"
+    />
+
+    <table class="tabla-hsi" id="tablaPacientes">
+      <thead>
+        <tr>
+          <th>Paciente</th>
+          <th>DNI / HC</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for p in lista_pacientes %}
+          <tr class="fila-paciente">
+            <td class="pac-nombre"><strong>{{ p.nombre_apellido }}</strong></td>
+            <td class="pac-dni">
+              DNI: {{ p.dni }}
+              <br />
+              <small style="color: var(--azul-hsi);">HC: {{ p.nro_hc }}</small>
+            </td>
+            <td>
+              <div style="display: flex; gap: 4px;">
+                <a href="/pacientes?ver={{ p.id_paciente }}" style="background: #e1f0fa; color: var(--azul-hsi); border: none; padding: 6px 8px; border-radius: 4px; cursor: pointer; font-size: 11px; text-decoration: none; font-weight: 600;">
+                  Ver Ficha
+                </a>
+                <a href="/pacientes?editar={{ p.id_paciente }}" style="background: #ffa800; color: white; border: none; padding: 6px 8px; border-radius: 4px; cursor: pointer; font-size: 11px; text-decoration: none;">
+                  Editar
+                </a>
+                <a href="/pacientes/eliminar/{{ p.id_paciente }}" onclick="return confirm('¿Está seguro de eliminar este paciente?')" style="background: #f64e60; color: white; border: none; padding: 6px 8px; border-radius: 4px; cursor: pointer; font-size: 11px; text-decoration: none;">
+                  Borrar
+                </a>
+              </div>
+            </td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  <!-- DETALLE: FICHA HISTÓRICA DEL PACIENTE (COLUMNA DERECHA) -->
+  {% if paciente_seleccionado %}
+    <div class="card-modulo" style="border-left: 4px solid var(--azul-hsi); height: fit-content; background: white; padding: 20px; border-radius: 6px; box-shadow: 0 2px 6px rgba(0,0,0,0.05);">
+      <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #eff2f5; padding-bottom: 12px; margin-bottom: 12px;">
+        <h2 style="font-size: 18px; margin: 0; color: #181c32;">🗂 Ficha Clínica Única</h2>
+        <a href="/pacientes" style="text-decoration: none; font-size: 16px; cursor: pointer; color: #f64e60; font-weight: bold;">✕ Cerrar</a>
+      </div>
+
+      <p style="font-size: 15px; color: #222;"><strong>Paciente:</strong> {{ paciente_seleccionado.nombre_apellido }}</p>
+      <p><strong>DNI:</strong> {{ paciente_seleccionado.dni }} | <strong>Nro. HC:</strong> <span style="color: var(--azul-hsi); font-weight: bold;">{{ paciente_seleccionado.nro_hc }}</span></p>
+      <p><strong>Fecha Nacimiento:</strong> {{ paciente_seleccionado.fecha_nacimiento }}</p>
+      <p><strong>Teléfono:</strong> {{ paciente_seleccionado.telefono or 'No registrado' }}</p>
+      <p style="margin-bottom: 20px;"><strong>Cobertura:</strong> {{ paciente_seleccionado.obra_social or 'Ninguna / Pública' }}</p>
+
+      <h3 style="font-size: 13px; text-transform: uppercase; color: #7e8299; border-bottom: 1px solid #eff2f5; padding-bottom: 4px;">📋 Historial de Turnos Diferidos</h3>
+      {% if historial_turnos %}
+        <div style="max-height: 250px; overflow-y: auto; margin-top: 10px;">
+          {% for t in historial_turnos %}
+            <div style="padding: 10px; border: 1px solid #eff2f5; border-radius: 4px; margin-bottom: 8px; font-size: 12px; background: #fbfbfb;">
+              <div style="display: flex; justify-content: space-between; align-items: center;">
+                <strong style="color: #333;">{{ t.especialidad }}</strong>
+                <!-- Badge dinámico de estado -->
+                {% if t.estado == 'pendiente' %}
+  <span class="badge-hospital" style="padding: 4px 8px; font-size: 10px; font-weight: bold; text-transform: uppercase; border-radius: 4px; background: #fff4de; color: #ffa800;">
+    {{ t.estado }}
+  </span>
+{% elif t.estado == 'asignado' %}
+  <span class="badge-hospital" style="padding: 4px 8px; font-size: 10px; font-weight: bold; text-transform: uppercase; border-radius: 4px; background: #c9f7f5; color: #1bc5bd;">
+    {{ t.estado }}
+  </span>
+{% else %}
+  <span class="badge-hospital" style="padding: 4px 8px; font-size: 10px; font-weight: bold; text-transform: uppercase; border-radius: 4px; background: #ffe2e5; color: #f64e60;">
+    {{ t.estado }}
+  </span>
+{% endif %}
+              </div>
+              <p style="margin: 4px 0; color: #5e6278;">Origen: {{ t.centros_salud.nombre if t.centros_salud else 'No disponible' }}</p>
+              {% if t.observaciones %}
+                <p style="margin: 4px 0 0 0; color: #565656; font-size: 11px; background: #fff; padding: 4px; border-left: 2px solid #b5b5c3;">
+                  <strong>Respuesta:</strong> {{ t.observaciones }}
+                </p>
+              {% endif %}
+            </div>
+          {% endfor %}
+        </div>
+      {% else %}
+        <p style="font-style: italic; font-size: 12px; margin-top: 8px; color: #7e8299;">Este paciente no registra solicitudes de derivación aún.</p>
+      {% endif %}
+    </div>
+  {% endif %}
+</div>
+
+<!-- 🏎 SCRIPT JAVASCRIPT PARA FILTRAR EN TIEMPO REAL -->
+<script>
+  document.getElementById('buscadorPacientes').addEventListener('input', function(e) {
+    const termino = e.target.value.toLowerCase();
+    const filas = document.querySelectorAll('.fila-paciente');
+    
+    filas.forEach(fila => {
+      const nombre = fila.querySelector('.pac-nombre').textContent.toLowerCase();
+      const dni = fila.querySelector('.pac-dni').textContent.toLowerCase();
+      
+      if (nombre.includes(termino) || dni.includes(termino)) {
+        fila.style.display = '';
+      } else {
+        fila.style.display = 'none';
+      }
+    });
+  });
+</script>
+{% endblock %}
