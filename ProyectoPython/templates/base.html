@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestión de Turnos Diferidos</title>
+    <!-- Vinculamos el CSS usando la función nativa de Flask -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/estilos.css') }}">
+</head>
+<body>
+    <div class="app-container">
+        
+        <!-- BARRA LATERAL -->
+        <aside className="sidebar" style="background: #1e1e2d; color: white; min-width: 265px; display: flex; flex-direction: column;">
+            <div class="sidebar-header">
+                <h1>GESTION INTERNA DE TURNOS</h1>
+            </div>
+
+            <nav class="sidebar-nav">
+                <!-- Usamos etiquetas <a> que viajan a rutas de Python en vez de manejar estados -->
+                <a href="/instituciones" class="nav-btn {% if request.path == '/instituciones' %}active{% endif %}">
+                    🏢 Instituciones
+                </a>
+
+                <a href="/pacientes" class="nav-btn {% if request.path == '/pacientes' %}active{% endif %}">
+                    👥 Pacientes (ABM)
+                </a>
+
+                <a href="/solicitud" class="nav-btn {% if request.path == '/solicitud' %}active{% endif %}">
+                    📝 Solicitud de turnos
+                </a>
+
+                <a href="/estado" class="nav-btn {% if request.path == '/estado' %}active{% endif %}">
+                    📊 Estado de Solicitudes
+                </a>
+
+                <a href="/gestion" class="nav-btn {% if request.path == '/gestion' %}active{% endif %}">
+                    📅 Gestión de turnos
+                </a>
+            </nav>
+
+            <div class="sidebar-footer">v1.2.0 — UTN FRSR Programación III</div>
+        </aside>
+
+        <!-- CONTENIDO DE LA PANTALLA -->
+        <main class="main-content">
+            <header class="main-header">
+                <span class="badge-hospital">Hospital Teodoro J. Schestakow</span>
+                <div class="user-info">
+                    Entorno: <strong style="color: var(--azul-hsi);">Mendoza Salud</strong>
+                </div>
+            </header>
+
+            <div class="content-body">
+                <div class="card-modulo">
+                    <!-- SE INYECTA EL CONTENIDO DE CADA PANTALLA DINÁMICAMENTE -->
+                    {% block contenido %}
+                    {% endblock %}
+                </div>
+            </div>
+        </main>
+
+    </div>
+</body>
+</html>
