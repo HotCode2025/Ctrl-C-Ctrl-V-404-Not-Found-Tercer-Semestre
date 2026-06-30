@@ -1,0 +1,148 @@
+{% extends 'base.html' %}
+
+{% block contenido %}
+<div>
+  <h2 class="form-titulo">📊 Panel de Seguimiento y Estado de Solicitudes</h2>
+
+  <div class="monitor-header" style="display: flex; gap: 12px; align-items: center; flex-wrap: wrap; padding: 16px; background: #f8f9fa; border-radius: 6px; margin-bottom: 16px;">
+    <div style="flex: 1; min-width: 200px;">
+      <input
+        type="text"
+        id="buscadorEstado"
+        placeholder="🔍 Buscar por Paciente, DNI, HC o Especialidad..."
+        class="form-control"
+        style="width: 100%;"
+      />
+    </div>
+    
+    <div style="min-width: 180px;">
+      <select id="filtroEstadoCombo" class="form-control" style="cursor: pointer;">
+        <option value="todos">👁️ Ver Todos los Estados</option>
+        <option value="pendiente">⏳ Pendientes de Auditoría</option>
+        <option value="asignado">✅ Turnos Otorgados</option>
+        <option value="rechazado">❌ Solicitudes Rechazadas</option>
+      </select>
+    </div>
+
+    <a href="/estado" class="btn-primario" style="width: auto; height: 38px; padding: 0 16px; text-decoration: none; display: flex; align-items: center; justify-content: center;">
+      🔄 Actualizar Lista
+    </a>
+  </div>
+
+  <table class="tabla-hsi">
+    <thead>
+      <tr>
+        <th>Fecha de Envío</th>
+        <th>Centro Emisor</th>
+        <th>Paciente Solicitante</th>
+        <th>Servicio Requerido</th>
+        <th>Estado Actual</th>
+        <th>Resolución Central</th>
+      </tr>
+    </thead>
+    <tbody id="cuerpoTablaEstado">
+      {% for s in solicitudes %}
+        <tr class="fila-solicitud" data-estado="{{ s.estado }}">
+          <td>
+            <span class="txt-fecha">{{ s.fecha_corta }}</span>
+            <br />
+            <small style="color: #b5b5c3;">{{ s.hora_corta }} hs</small>
+          </td>
+
+          <td class="txt-origen">
+            <strong>{{ s.centros_salud.nombre if s.centros_salud else 'No identificado' }}</strong>
+          </td>
+
+          <td class="txt-paciente">
+            <strong>{{ s.pacientes.nombre_apellido if s.pacientes else 'Desconocido' }}</strong>
+            <br />
+            <small style="color: #7e8299;">DNI: {{ s.pacientes.dni }} | HC: {{ s.pacientes.nro_hc }}</small>
+          </td>
+
+          <td class="txt-especialidad">
+            <span style="font-weight: 600; color: var(--azul-hsi);">{{ s.especialidad }}</span>
+            <p style="margin: 4px 0 0 0; font-size: 11px; color: #7e8299; font-style: italic;">
+              Ref: "{{ s.diagnostico_motivo }}"
+            </p>
+          </td>
+
+          <td>
+            {% if s.estado == 'pendiente' %}
+              <span class="badge-estado" style="background: #fff4de; color: #ffa800; padding: 4px 8px; font-size: 11px; font-weight: bold; border-radius: 4px; text-transform: uppercase;">PENDIENTE</span>
+            {% elif s.estado == 'asignado' %}
+              <span class="badge-estado" style="background: #c9f7f5; color: #1bc5bd; padding: 4px 8px; font-size: 11px; font-weight: bold; border-radius: 4px; text-transform: uppercase;">ASIGNADO</span>
+            {% else %}
+              <span class="badge-estado" style="background: #ffe2e5; color: #f64e60; padding: 4px 8px; font-size: 11px; font-weight: bold; border-radius: 4px; text-transform: uppercase;">RECHAZADO</span>
+            {% endif %}
+          </td>
+
+          <td style="max-width: 220px;">
+            {% if s.observaciones %}
+              {% if s.estado == 'rechazado' %}
+                <div style="padding: 8px; border-radius: 4px; font-size: 12px; font-weight: 500; background: #fff5f5; color: #f64e60; border: 1px solid #fecdd3;">
+                  {{ s.observaciones }}
+                </div>
+              {% else %}
+                <div style="padding: 8px; border-radius: 4px; font-size: 12px; font-weight: 500; background: #e8fff3; color: #1bc5bd; border: 1px solid #c6f6d5;">
+                  {{ s.observaciones }}
+                </div>
+              {% endif %}
+            {% else %}
+              <span style="color: #b5b5c3; font-size: 12px; font-style: italic;">
+                En espera de revisión por auditoría médica...
+              </span>
+            {% endif %}
+          </td>
+        </tr>
+      {% else %}
+        <tr class="sin-resultados-base">
+          <td colspan="6" style="text-align: center; padding: 30px; color: #7e8299; font-style: italic;">
+            No se registran solicitudes entrantes en la base de datos.
+          </td>
+        </tr>
+      {% endfor %}
+      
+      <tr id="filaNoResultados" style="display: none;">
+        <td colspan="6" style="text-align: center; padding: 30px; color: #f64e60; font-weight: 500;">
+          ⚠️ No se encontraron solicitudes que coincidan con los criterios de búsqueda.
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<script>
+  const txtBuscar = document.getElementById('buscadorEstado');
+  const comboEstado = document.getElementById('filtroEstadoCombo');
+  const filas = document.querySelectorAll('.fila-solicitud');
+  const filaNoResultados = document.getElementById('filaNoResultados');
+
+  function filtrarTabla() {
+    const termino = txtBuscar.value.toLowerCase().trim();
+    const estadoSeleccionado = comboEstado.value;
+    let contadorVisibles = 0;
+
+    filas.forEach(fila => {
+      const paciente = fila.querySelector('.txt-paciente').textContent.toLowerCase();
+      const origen = fila.querySelector('.txt-origen').textContent.toLowerCase();
+      const especialidad = fila.querySelector('.txt-especialidad').textContent.toLowerCase();
+      const estadoFila = fila.getAttribute('data-estado');
+
+      const coincideTexto = paciente.includes(termino) || origen.includes(termino) || especialidad.includes(termino);
+      const coincideEstado = estadoSeleccionado === 'todos' || estadoFila === estadoSeleccionado;
+
+      if (coincideTexto && coincideEstado) {
+        fila.style.display = '';
+        contadorVisibles++;
+      } else {
+        fila.style.display = 'none';
+      }
+    });
+
+    filaNoResultados.style.display = (contadorVisibles === 0 && filas.length > 0) ? '' : 'none';
+  }
+
+  txtBuscar.addEventListener('input', filtrarTabla);
+  comboEstado.addEventListener('change', filtrarTabla);
+</script>
+{% endblock %}
